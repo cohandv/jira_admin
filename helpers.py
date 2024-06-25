@@ -1,6 +1,5 @@
 import requests
 from requests.auth import HTTPBasicAuth
-
 from config import JIRA_USER, JIRA_URL, JIRA_API_TOKEN
 
 
@@ -25,3 +24,16 @@ def get_tickets(jql):
         total_issues += data['issues']
 
     return total_issues
+
+
+def change_label(issue_id, operation):
+    json_data = {
+        "update": {
+            "labels": operation
+        }
+    }
+    # Make the request and handle the response
+    response = requests.put(f"{JIRA_URL}/3/issue/{issue_id}",
+                            json=json_data,
+                            auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
+    response.raise_for_status()

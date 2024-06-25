@@ -22,17 +22,21 @@ class Project(jira):
         pass
 
     def update_epics(self):
-        # Projects not considered at origin
+        print(f"{self.print_title()} - Evaluating their epics {len(self.epics)}")
+        print(f"{self.spacing}   * NOT CONSIDERED WITHOUT EACOUNCIL LABEL")
+        # # Projects not considered at origin
         for epic in [epic for epic in self.epics if not epic.ea_label]:
             epic.process_not_considered()
         pass
 
         # Projects closed considered
+        print(f"{self.spacing}   * CONSIDERED BUT CLOSED")
         for epic in [epic for epic in self.epics if epic.ea_label and epic.status in JIRA_FINISHED_STATES]:
             epic.process_considered_and_closed()
         pass
 
-        # Projects open considered
+        # # Projects open considered
+        print(f"{self.spacing}   * CONSIDERED AND OPEN")
         for epic in [epic for epic in self.epics if epic.ea_label and epic.status not in JIRA_FINISHED_STATES]:
             epic.process_considered_and_open()
         pass
