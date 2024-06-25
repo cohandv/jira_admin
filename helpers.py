@@ -1,6 +1,6 @@
 import requests
 from requests.auth import HTTPBasicAuth
-from config import JIRA_USER, JIRA_URL, JIRA_API_TOKEN, JIRA_PROJECT, JIRA_CLOSE_TRANSITION
+from config import JIRA_USER, JIRA_URL, JIRA_API_TOKEN, JIRA_PROJECT, JIRA_CLOSE_TRANSITION, JIRA_RUN
 
 
 def get_tickets(jql):
@@ -26,56 +26,60 @@ def get_tickets(jql):
     return total_issues
 
 
-def get_ticket_by_summary(summary):
+def get_ticket_by_summary(summary, parent):
     """
     Get all tickets for the given summary
     :param summary:   value
     :return:
     """
-    return next(iter(get_tickets(f'summary~"{summary}"')), None)
+    return next(iter(get_tickets(f'summary~"{summary}" AND parent={parent}')), None)
 
 
 def change_label(issue_id, operation):
-    json_data = {
-        "update": {
-            "labels": operation
+    if JIRA_RUN:
+        json_data = {
+            "update": {
+                "labels": operation
+            }
         }
-    }
-    response = requests.put(f"{JIRA_URL}/3/issue/{issue_id}",
-                            json=json_data,
-                            auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
-    response.raise_for_status()
+        response = requests.put(f"{JIRA_URL}/3/issue/{issue_id}",
+                                json=json_data,
+                                auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
+        response.raise_for_status()
 
 
 def close_ticket(issue_id):
-    transition_data = {
-        "transition": {
-            "id": JIRA_CLOSE_TRANSITION
-        }
-    }
-
-    # Make the request to perform the transition
-    response = requests.post(f"{JIRA_URL}/3/issue/{issue_id}/transitions",
-                                        auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN),
-                                        json=transition_data)
-    response.raise_for_status()
-
-def create_ticket(epic, title, asignee, status) -> str:
-    ticket = {
-        "fields": {
-            "project":
-                {
-                    "key": JIRA_PROJECT
-                },
-            "assignee": asignee,
-            "customfield_10008": epic,
-            "summary": title,
-            "issuetype": {
-                "name": "Task"
+    if JIRA_RUN:
+        transition_data = {
+            "transition": {
+                "id": JIRA_CLOSE_TRANSITION
             }
         }
-    }
-    r = requests.post(f"{JIRA_URL}/2/issue", json=ticket, auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
-    r.raise_for_status()
-    ticket_number = r.json()["key"]
-    return ticket_number
+
+        # Make the request to perform the transition
+        response = requests.post(f"{JIRA_URL}/3/issue/{issue_id}/transitions",
+                                 auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN),
+                                 json=transition_data)
+        response.raise_for_status()
+
+
+def create_ticket(epic, title, asignee) -> str:
+    if JIRA_RUN:
+        ticket = {
+            "fields": {
+                "project":
+                    {
+                        "key": JIRA_PROJECT
+                    },
+                "assignee": asignee,
+                "customfield_10008": epic,
+                "summary": title,
+                "issuetype": {
+                    "name": "Task"
+                }
+            }
+        }
+        r = requests.post(f"{JIRA_URL}/2/issue", json=ticket, auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
+        r.raise_for_status()
+        ticket_number = r.json()["key"]
+        return ticket_number
