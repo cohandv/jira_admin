@@ -1,3 +1,4 @@
+from helpers import close_ticket
 from program import Program
 
 if __name__ == "__main__":

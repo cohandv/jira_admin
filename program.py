@@ -6,8 +6,7 @@ from project import Project
 
 class Program(jira):
     def __init__(self, key):
-        programs = get_tickets(f"id={key}")
-        program_obj = programs[0] if len(programs) > 0 else None
+        program_obj = next(iter(get_tickets(f"id={key}")))
         super().__init__(key, program_obj)
         self.ea_architect = program_obj["fields"][JIRA_EA_ARCHITECT_FIELD]
         self.projects = []
@@ -19,7 +18,7 @@ class Program(jira):
         :return:
         """
         proj_tickets = get_tickets(self.get_parent_query())
-        self.projects = list(map(lambda x: Project(x), proj_tickets))
+        self.projects = list(map(lambda x: Project(x, self.ea_architect), proj_tickets))
 
     def review_projects(self):
         print(f"Updating program {self.key}, there are {len(self.projects)} projects")

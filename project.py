@@ -5,9 +5,11 @@ from jira import jira
 
 
 class Project(jira):
-    def __init__(self, obj):
+    def __init__(self, obj, ea_architect):
         super().__init__(obj["key"], obj)
         self.epics = []
+        self.ea_architect = ea_architect
+        # TODO: Assign EA to project as part of JP ask
         self._load_epics()
 
     def _load_epics(self):
@@ -16,7 +18,7 @@ class Project(jira):
         :return:
         """
         epic_tickets = get_tickets(self.get_parent_query())
-        self.epics = list(map(lambda x: Epic(x), epic_tickets))
+        self.epics = list(map(lambda x: Epic(x, self.ea_architect), epic_tickets))
 
     def search_for_epic(self):
         pass
