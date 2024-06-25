@@ -1,6 +1,6 @@
 from config import JIRA_FINISHED_STATES
 from epic import Epic
-from helpers import get_tickets
+from helpers import get_tickets, change_ea_architect
 from jira import jira
 
 
@@ -19,6 +19,9 @@ class Project(jira):
         """
         epic_tickets = get_tickets(self.get_parent_query())
         self.epics = list(map(lambda x: Epic(x, self.key, self.ea_architect), epic_tickets))
+
+    def fix_ea_architect(self):
+        change_ea_architect(self.key, self.ea_architect)
 
     def update_epics(self):
         print(f"{self.print_title()} - Evaluating their epics {len(self.epics)}")

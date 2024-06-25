@@ -23,4 +23,5 @@ class Program(jira):
     def review_projects(self):
         print(f"Updating program {self.key}, there are {len(self.projects)} projects")
         for project in self.projects:
+            project.fix_ea_architect()
             project.update_epics()

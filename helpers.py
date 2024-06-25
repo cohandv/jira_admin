@@ -1,6 +1,7 @@
 import requests
 from requests.auth import HTTPBasicAuth
-from config import JIRA_USER, JIRA_URL, JIRA_API_TOKEN, JIRA_PROJECT, JIRA_CLOSE_TRANSITION, JIRA_RUN
+from config import JIRA_USER, JIRA_URL, JIRA_API_TOKEN, JIRA_PROJECT, JIRA_CLOSE_TRANSITION, JIRA_RUN, \
+    JIRA_EA_ARCHITECT_FIELD
 
 
 def get_tickets(jql):
@@ -40,6 +41,19 @@ def change_label(issue_id, operation):
         json_data = {
             "update": {
                 "labels": operation
+            }
+        }
+        response = requests.put(f"{JIRA_URL}/3/issue/{issue_id}",
+                                json=json_data,
+                                auth=HTTPBasicAuth(JIRA_USER, JIRA_API_TOKEN))
+        response.raise_for_status()
+
+
+def change_ea_architect(issue_id, value):
+    if JIRA_RUN:
+        json_data = {
+            "fields": {
+                JIRA_EA_ARCHITECT_FIELD: value
             }
         }
         response = requests.put(f"{JIRA_URL}/3/issue/{issue_id}",
