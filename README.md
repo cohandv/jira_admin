@@ -18,11 +18,20 @@ Connected to pydev debugger (build 233.13135.95)
 
 ## Logic of the backfill
 ```mermaid
-  graph TD;
-      A-->B;
-      A-->C;
-      B-->D;
-      C-->D;
+flowchart TD
+    A[Enterprise Architect User]-->|Get Program Details|B[Program]
+    B --> |Get Projects|C[Project]
+    C --> CC(Assign Enterprise architect inherited from program to project)
+    CC --> |Get Epics|D[Epic]
+    D --> |Foreach Epic in each project|F{Has EACouncil label}
+    F --> |No|G(Update epic with label EACouncilReviewed)
+    G --> H(End)
+    F --> |Yes|I(Create EA follow up tickets)
+    I --> |Add EACountil label|J(Added EACouncil label to EA tickets)
+    J --> K{Is Epic open}
+    K --> |Yes|H
+    K --> |No|M(Close EA follow up tickets with Won't Do status)
+    M --> H
 ```
 
 * Note that this is idempotent, it will always produce the same result, it wont duplicate tickets
