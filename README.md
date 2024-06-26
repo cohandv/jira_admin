@@ -11,8 +11,7 @@ The purpose of this automation is to backfill our tickets with a defined strateg
 ## Execution
 
 ```shell
-./main.py -ju YOUR_USER@ipsy.com -jt YOUR_JIRA_API_TOKEN -t YOUR_TPM 
-Connected to pydev debugger (build 233.13135.95)
+./main.py -ju YOUR_JIRA_USER -jt YOUR_JIRA_API_TOKEN -t YOUR_TPM_PROGRAM
 ```
 * Note that by default will dry run making an analysis on your program unless you pass `--run` then will perform changes
 
