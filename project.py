@@ -1,6 +1,5 @@
 from config import JIRA_FINISHED_STATES
 from epic import Epic
-from helpers import get_tickets, change_ea_architect
 from jira import jira
 
 
@@ -17,14 +16,14 @@ class Project(jira):
         Get all project tickets for the given program
         :return:
         """
-        epic_tickets = get_tickets(self.get_parent_query())
+        epic_tickets = self.get_tickets(self.get_parent_query())
         self.epics = list(map(lambda x: Epic(x, self.key, self.ea_architect), epic_tickets))
 
     def fix_ea_architect(self):
-        change_ea_architect(self.key, self.ea_architect)
+        self.change_ea_architect(self.key, self.ea_architect)
 
     def update_epics(self):
-        print(f"{self.print_title()} - Evaluating their epics {len(self.epics)}")
+        print(f"{self.print_title()} - Evaluating {len(self.epics)} epics")
         if len(self.epics) > 0:
             print(f"{self.spacing}   * NOT CONSIDERED WITHOUT EACOUNCIL LABEL")
             # # Projects not considered at origin

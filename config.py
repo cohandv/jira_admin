@@ -1,9 +1,5 @@
 import os
 
-# Inputs
-JIRA_USER = os.getenv("JIRA_USER")
-JIRA_API_TOKEN = os.getenv("JIRA_API_TOKEN")
-
 # Settings
 JIRA_URL = os.getenv("JIRA_URL", "https://ipsycorp.atlassian.net/rest/api")
 JIRA_FINISHED_STATES = ["done", "cancelled", "rejected", "won't do", "abandoned"]
@@ -26,5 +22,3 @@ JIRA_TICKETS_SUMMARIES = {
 }
 
 JIRA_CLOSE_TRANSITION = 231
-
-JIRA_RUN = True

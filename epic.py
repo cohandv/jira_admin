@@ -1,5 +1,4 @@
 from config import JIRA_EA_SOLUTION_FIELD, JIRA_LABELS, JIRA_TICKETS_SUMMARIES, JIRA_EA_ARCHITECT_FIELD
-from helpers import change_label, create_ticket, get_ticket_by_summary, close_ticket
 from jira import jira
 
 
@@ -17,7 +16,7 @@ class Epic(jira):
                 "add": f"{label}"
             }
         ]
-        change_label(self.key, operation)
+        self.change_label(self.key, operation)
         print(f"{self.spacing}{self.action_spacing}Added label: {label}")
 
     def _remove_label(self, label):
@@ -26,15 +25,15 @@ class Epic(jira):
                 "remove": f"{label}"
             }
         ]
-        change_label(self.key, operation)
+        self.change_label(self.key, operation)
         print(f"{self.spacing}{self.action_spacing}Removed label: {label}")
 
     def _create_ticket(self, summary, close_ticket_action=False):
-        ticket = get_ticket_by_summary(summary, self.key)
+        ticket = self.get_ticket_by_summary(summary, self.key)
         if not ticket:
-            new_ticket_id = create_ticket(self.key, summary, self.ea_architect)
+            new_ticket_id = self.create_ticket(self.key, summary, self.ea_architect)
             if close_ticket_action:
-                close_ticket(new_ticket_id)
+                self.close_ticket(new_ticket_id)
             print(f'{self.spacing}{self.action_spacing}Newly created ticket for {summary}: {new_ticket_id}')
         else:
             print(f'{self.spacing}{self.action_spacing}Existing ticket for {summary}: {ticket["key"]}')
