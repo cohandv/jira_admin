@@ -21,21 +21,22 @@ class Project(jira):
 
     def fix_ea_architect(self):
         self.change_ea_architect(self.key, self.ea_architect)
+        print(f"{self.spacing}     Added EA {self.ea_architect['emailAddress']} to project: {self.key}")
 
     def update_epics(self):
         print(f"{self.print_title()} - Evaluating {len(self.epics)} epics")
         if len(self.epics) > 0:
             print(f"{self.spacing}   * NOT CONSIDERED WITHOUT EACOUNCIL LABEL")
-            # # Projects not considered at origin
+            # Projects not considered at origin
             for epic in [epic for epic in self.epics if not epic.ea_label]:
                 epic.process_not_considered()
 
-            # Projects closed considered
+            # # Projects closed considered
             print(f"{self.spacing}   * CONSIDERED BUT CLOSED")
             for epic in [epic for epic in self.epics if epic.ea_label and epic.status in JIRA_FINISHED_STATES]:
                 epic.process_considered_and_closed()
-
-            # # Projects open considered
+            #
+            # # # Projects open considered
             print(f"{self.spacing}   * CONSIDERED AND OPEN")
             for epic in [epic for epic in self.epics if epic.ea_label and epic.status not in JIRA_FINISHED_STATES]:
                 epic.process_considered_and_open()

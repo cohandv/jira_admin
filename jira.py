@@ -113,6 +113,8 @@ class jira:
                                     json=json_data,
                                     auth=self.get_auth())
             response.raise_for_status()
+        else:
+            print(f"{self.spacing}\t Ignoring change ea architect to project ticket")
 
     def create_ticket(self, epic, title, asignee) -> str:
         if jira.run:
