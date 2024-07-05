@@ -18,7 +18,8 @@ JIRA_PROJECT = "AR"
 JIRA_TICKETS_SUMMARIES = {
     "ASSIGN_SA": "Assign solution architect",
     "SOLUTION_DESIGN": "Develop solution design",
-    "EA_RETRO": "Run EA retro and share learnings"
+    "EA_RETRO": "Run EA retro and share learnings",
+    "PENDING_REVIEW": "Review Epic"
 }
 
 JIRA_CLOSE_TRANSITION = 231

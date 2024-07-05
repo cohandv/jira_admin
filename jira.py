@@ -21,6 +21,7 @@ class jira:
             self.status = fields["status"]["name"].lower()
             self.labels = list(map(lambda x: x.lower(), fields["labels"]))
             self.ea_label = JIRA_LABELS["CONSIDERED"].lower() in self.labels
+            self.review_pending = JIRA_LABELS["PENDING_REVIEW"].lower() in self.labels
         else:
             self.name = None
             self.status = None
@@ -116,10 +117,11 @@ class jira:
         else:
             print(f"{self.spacing}\t Ignoring change ea architect to project ticket")
 
-    def create_ticket(self, epic, title, asignee) -> str:
+    def create_ticket(self, epic, title, asignee, description) -> str:
         if jira.run:
             ticket = {
                 "fields": {
+                    "description": description,
                     "project":
                         {
                             "key": JIRA_PROJECT
