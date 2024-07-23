@@ -121,7 +121,6 @@ class jira:
         if jira.run:
             ticket = {
                 "fields": {
-                    "description": description,
                     "project":
                         {
                             "key": JIRA_PROJECT
@@ -129,6 +128,7 @@ class jira:
                     "assignee": asignee,
                     "customfield_10008": epic,
                     "summary": title,
+                    "description": description,
                     "issuetype": {
                         "name": "Task"
                     },

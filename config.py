@@ -19,7 +19,17 @@ JIRA_TICKETS_SUMMARIES = {
     "ASSIGN_SA": "Assign solution architect",
     "SOLUTION_DESIGN": "Develop solution design",
     "EA_RETRO": "Run EA retro and share learnings",
+    "EA_ARTIFACTS": "Update EA artifacts for project",
     "PENDING_REVIEW": "Review Epic"
 }
+
+JIRA_TICKETS_ASSIGNEE = {
+    "ASSIGN_SA": "EA",
+    "SOLUTION_DESIGN": "SA",
+    "EA_RETRO": "EA",
+    "EA_ARTIFACTS": "SA",
+    "PENDING_REVIEW": "EA"
+}
+
 
 JIRA_CLOSE_TRANSITION = 231
